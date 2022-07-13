@@ -3,10 +3,6 @@
 #include <time.h>
 #include <stdbool.h>
 
-#define LINHAS 10
-#define COLUNAS 20
-// #define QTD_BOMBAS 40
-
 typedef struct Celulas_t
 {
     bool temBomba;   // pode ser true ou false
@@ -18,9 +14,11 @@ typedef struct Celulas_t
 // Variavel Global da Matriz referente ao campo
 Celulas campoMinado[LINHAS][COLUNAS];
 int l, c; // l->linhas e c->colunas
+const int LINHAS = 10;
+CONST INT COLUNAS = 20;
 const int QTD_BOMBAS = 40;
 
-// função para inicair o campo
+// função para iniciarcampo
 void inicioJogo()
 {
     for (l = 0; l < LINHAS; l++)
