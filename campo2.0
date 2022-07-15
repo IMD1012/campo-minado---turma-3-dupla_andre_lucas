@@ -3,6 +3,9 @@
 #include <time.h>
 #include <stdbool.h>
 
+#define LINHAS 10 // mudei a declaração das constantes para a forma de #define
+#define COLUNAS 20
+
 typedef struct Celulas_t
 {
     bool temBomba;   // pode ser true ou false
@@ -12,12 +15,10 @@ typedef struct Celulas_t
 } Celulas;
 
 // Variavel Global da Matriz referente ao campo
-
 int l, c; // l->linhas e c->colunas
-const int LINHAS = 10;
-const int COLUNAS = 20;
 const int QTD_BOMBAS = 40;
 Celulas campoMinado[LINHAS][COLUNAS];
+
 // função para iniciarcampo
 void inicioJogo()
 {
@@ -55,70 +56,81 @@ void addBombas(int QTD_BOMBAS, Celulas campoMinado[LINHAS][COLUNAS])
   for (l = 0; l < LINHAS; l++)
     {
         for (c = 0; c < COLUNAS; c++)
-        { 
+        {
             campoMinado[l][c].vizinhos = ;
         }
     }
 }
 */
-void campovisualinicial(Celulas campoMinado[LINHAS][COLUNAS]){
-  for(int i = 0 ; i < COLUNAS ; i++)
-      printf("\t%d" , i);
+void campoVisualInicial(Celulas campoMinado[LINHAS][COLUNAS])
+{
+    for (int i = 0; i < COLUNAS; i++)
+        printf("\t%d", i);
     printf("\n \t ---------------------------------");
-  
-  for(int i = 0 ; i < LINHAS ; i++){
-    printf("\t%d |" , i);
-    
-     for(int j = 0 ; j < COLUNAS ; j++){
-       campoMinado[i][j].campo = ' ';
-       printf("%c" , campoMinado[i][j].campo);
-     } 
-    printf("\n");
-  }
-  
+
+    for (int i = 0; i < LINHAS; i++)
+    {
+        printf("\t%d |", i);
+
+        for (int j = 0; j < COLUNAS; j++)
+        {
+            campoMinado[i][j].campo = ' ';
+            printf("%c", campoMinado[i][j].campo);
+        }
+        printf("\n");
+    }
 }
 
-void campovisual(Celulas campoMinado[LINHAS][COLUNAS] , int x , int y ){
-  if(campoMinado[x][y].temBomba != true){
-    
-    campoMinado[x][y].campo = '_';
-    for(int i = 0 ; i < LINHAS ; i++ ){
-      for(int j = 0 ; j < COLUNAS ; j++){
-        printf("%c", campoMinado[i][j].campo);
+void campoVisual(Celulas campoMinado[LINHAS][COLUNAS], int x, int y)
+{
+    if (campoMinado[x][y].temBomba != true)
+    {
+
+        campoMinado[x][y].campo = '_';
+        for (int i = 0; i < LINHAS; i++)
+        {
+            for (int j = 0; j < COLUNAS; j++)
+            {
+                printf("%c", campoMinado[i][j].campo);
+            }
+            printf("\n");
+        }
     }
-      printf("\n");
-  }
-    
-  }
-  else{
-    
-    campoMinado[x][y].campo = '*';
-    for(int i = 0 ; i < LINHAS ; i++ ){
-      for(int j = 0 ; j < COLUNAS ; j++){
-        printf("%c", campoMinado[i][j].campo);
+    else
+    {
+
+        campoMinado[x][y].campo = '*';
+        for (int i = 0; i < LINHAS; i++)
+        {
+            for (int j = 0; j < COLUNAS; j++)
+            {
+                printf("%c", campoMinado[i][j].campo);
+            }
+            printf("\n");
+        }
     }
-      printf("\n");
-  }
-  }
-  
 }
 
 int main(int argc, char const *argv[])
-{   
-    int x,y;
-  
+{
+    int x, y;
+
     inicioJogo();
     addBombas(QTD_BOMBAS, campoMinado);
-    campovisualinicial(campoMinado);
-    scanf("%d %d" , &x ,&y);
+    campoVisualInicial(campoMinado);
 
-    while(campoMinado[x][y].temBomba != true){
-      campovisual(campoMinado,x,y);
-      
-      scanf("%d %d" , &x ,&y);
+    printf("Digite a coordenada da celula que deseja revelar: ");
+    scanf("%d %d", &x, &y);
+
+    while (campoMinado[x][y].temBomba != true)
+    {
+        campoVisual(campoMinado, x, y);
+
+        printf("Digite a coordenada da celula que deseja revelar: ");
+        scanf("%d %d", &x, &y);
     }
 
-    printf("PERDEU");
+    printf("PERDEU! Voce encontrou uma bomba :( !");
 
     return 0;
 }
