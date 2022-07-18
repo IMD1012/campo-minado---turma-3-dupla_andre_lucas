@@ -107,6 +107,7 @@ void contBombas()
 
 void campoVisualInicial(Celulas campoMinado[LINHAS][COLUNAS])
 {
+    char espaco = ' ';
     printf("\n\n\t    ");
     for(l = 0; l < COLUNAS; l++){
         printf(" %d  ", l);} // índices das colunas
@@ -129,13 +130,29 @@ void campoVisualInicial(Celulas campoMinado[LINHAS][COLUNAS])
             }
             else
             {
-                printf("   ");
+                printf("%4c", espaco);
             }
             printf("|"); // decobrir pq nao esta imprimindo as ultimas duas vezes
         }
         printf("\n\t   ------------------------------------------------------------------------------------------\n");
     }
 }
+
+// void abreCelula(int l, int c){
+//     if(coordValid(l, c) == true && campoMinado[l][c].estaAberta == false){
+//         campoMinado[l][c].estaAberta = true;
+//         if(campoMinado[l][c].vizinhos == false){
+//             abreCelula(l-1, c);
+//             abreCelula(l+1, c);
+//             abreCelula(l, c+1);
+//             abreCelula(l, c-1);
+//             abreCelula(l-1, c-1);
+//             abreCelula(l+1, c-1);
+//             abreCelula(l-1, c+1);
+//             abreCelula(l+1, c-1);
+//         }
+//     }
+// }
 
 void campoVisual(Celulas campoMinado[LINHAS][COLUNAS], int x, int y)
 {
@@ -171,6 +188,7 @@ int main(int argc, char const *argv[])
 {
     int x, y;
     int timeSpent;
+    int decisao;
 
     inicioJogo();
     addBombas(QTD_BOMBAS, campoMinado);
@@ -184,14 +202,31 @@ int main(int argc, char const *argv[])
     {
         campoVisual(campoMinado, x, y);
 
-        printf("Digite a coordenada da celula que deseja revelar: ");
-        scanf("%d %d", &x, &y);
+        printf("Para digitar uma corrdenada digite 1\n");
+        printf("Para saber o tempo decorrido digite 2\n");
+        printf("Para pedir ajuda digite 3\n");
+        scanf("%d", &decisao);
+
+        if (decisao == 1)
+        {
+            printf("Digite a coordenada da celula que deseja revelar: ");
+            scanf("%d %d", &x, &y);
+        }
+        if (decisao == 2)
+        {
+            time_t end = time(NULL);
+            timeSpent == end - begin;
+            printf("Seu tempo gasto no campo minado foi: %d segundos!\n", timeSpent);
+        }
+        if (decisao == 3)
+        {
+            printf("Pediu Ajuda!\n");
+        } 
     }
 
-    time_t end = time(NULL);
-    timeSpent = end - begin;
+    
     printf("PERDEU! Voce encontrou uma bomba :( \n");
-    printf("Seu tempo gasto no campo minado foi: %d segundos!\n", timeSpent);
+    
 
     return 0;
 }
