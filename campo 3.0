@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include <time.h>
 
 #define LINHAS 10 // mudei a declaração das constantes para a forma de #define
 #define COLUNAS 20
@@ -61,7 +62,7 @@ bool coordValid(int l, int c)
         return false;
 }
 
-int quantBombasVizinhas(int x, int y){
+int bombasVizinhas(int x, int y){
     int quantidade = 0;
 
     if(coordValid(x - 1, c) && campoMinado[x-1][y].temBomba){
@@ -72,7 +73,6 @@ int quantBombasVizinhas(int x, int y){
         quantidade++;}
     if(coordValid(x, y - 1) && campoMinado[x][y-1].temBomba){
         quantidade++;}
-    // DSE -> [L-1][C-1] // DIE -> [L+1[[C-1] // DSD -> [L-1][C+1] // DID -> [L+1][C+1]
     if (coordValid(x-1, y-1) && campoMinado[x-1][y-1].temBomba) // DSE
     {
         quantidade++;
@@ -93,15 +93,27 @@ int quantBombasVizinhas(int x, int y){
     return quantidade;
 }
 
+void contBombas()
+{
+    for(l = 0; l < LINHAS; l++)
+    {
+        for(c = 0; c < COLUNAS; c++)
+        {
+            campoMinado[l][c].vizinhos = bombasVizinhas(l, c);
+        }
+            
+    }
+}
+
 void campoVisualInicial(Celulas campoMinado[LINHAS][COLUNAS])
 {
     printf("\n\n\t    ");
-    for(l = 0; l < COLUNAS; l++)
-        printf(" %d  ", l); // índices das colunas
+    for(l = 0; l < COLUNAS; l++){
+        printf(" %d  ", l);} // índices das colunas
     printf("\n\t   ------------------------------------------------------------------------------------------\n");
     for(l = 0; l < LINHAS; l++)
     {
-        printf("\t%d  |", l); // índices das linhas
+        printf(" %4d  |", l); // índices das linhas
         for(c = 0; c < COLUNAS; c++)
         {
             if(campoMinado[l][c].estaAberta)
@@ -158,6 +170,7 @@ void campoVisual(Celulas campoMinado[LINHAS][COLUNAS], int x, int y)
 int main(int argc, char const *argv[])
 {
     int x, y;
+    int timeSpent;
 
     inicioJogo();
     addBombas(QTD_BOMBAS, campoMinado);
@@ -165,6 +178,7 @@ int main(int argc, char const *argv[])
 
     printf("Digite a coordenada da celula que deseja revelar: ");
     scanf("%d %d", &x, &y);
+    time_t begin = time(NULL);
 
     while (campoMinado[x][y].temBomba != true)
     {
@@ -174,7 +188,10 @@ int main(int argc, char const *argv[])
         scanf("%d %d", &x, &y);
     }
 
-    printf("PERDEU! Voce encontrou uma bomba :( !");
+    time_t end = time(NULL);
+    timeSpent = end - begin;
+    printf("PERDEU! Voce encontrou uma bomba :( \n");
+    printf("Seu tempo gasto no campo minado foi: %d segundos!\n", timeSpent);
 
     return 0;
 }
