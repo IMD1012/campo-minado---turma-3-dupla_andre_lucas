@@ -12,7 +12,7 @@ typedef struct Celulas_t
     bool temBomba;   // pode ser true ou false
     bool estaAberta; // pode ser true ou false
     int vizinhos;    // vai de 0 a 8
-    char campo[5];
+    int campo;
 } Celulas;
 
 // Variavel Global da Matriz referente ao campo
@@ -65,7 +65,7 @@ bool coordValid(int l, int c)
 int quantBombasVizinhas(int x, int y){
     int quantidade = 0;
 
-    if(coordValid(x - 1, c) && campoMinado[x-1][y].temBomba){
+    if(coordValid(x - 1, y) && campoMinado[x-1][y].temBomba){
         quantidade++;}
     if(coordValid(x + 1, y) && campoMinado[x+1][y].temBomba){
         quantidade++;}
@@ -94,35 +94,96 @@ int quantBombasVizinhas(int x, int y){
     return quantidade;
 }
 
-void criarcampo(Celulas campoMinado[LINHAS][COLUNAS]){
-  for(int i = 0 ; i <LINHAS ; i++){
-    for(int j = 0 ; j < COLUNAS ; j++){
-      if(campoMinado[i][j].temBomba != true){
-        campoMinado[i][j].campo =
-      }
+void contarbombas(){
+  for (l = 0; l < LINHAS; l++){
+        for (c = 0; c < COLUNAS; c++){
+          campoMinado[l][c].vizinhos = quantBombasVizinhas(l, c);      
+        }
     }
-  }
+  
 }
 
-void campoVisualPrint(Celulas campoMinado[LINHAS][COLUNAS])
+void campoVisualPrint()
 {
-    printf("\n\n                                    Campo Minado");
-    printf("\n\n   ");
+    
+    printf("\n\n\t ");
     for(l = 0; l < COLUNAS; l++)
-        printf("%4d", l); // índices das colunas
-    printf("\n\t---------------------------------------------------------------------------------\n");
+        printf("\t%d ", l); // índices das colunas
+    printf("\n\t  ---------------------------------------------------------------------------------\n");
     for(l = 0; l < LINHAS; l++)
     {
-        printf("%d", l); // índices das linhas
+        printf("\t%d |", l); // índices das linhas
         for(c = 0; c < COLUNAS; c++)
         {
-                printf("   ");
+          if(campoMinado[l][c].estaAberta){
+            if(campoMinado[l][c].temBomba){
+              printf(" * ");
+            }
+            else{
+              printf(" %d " , campoMinado[l][c].vizinhos);
+            }
+          }
+          else{
+            printf("   ");
+          }
+          
             
             printf("|"); // decobrir pq nao esta imprimindo as ultimas duas vezes
         }
-        printf("   |");
-        printf("\n\t---------------------------------------------------------------------------------\n");
+        
+        printf("\n\t  ---------------------------------------------------------------------------------\n");
     }
+   
+}
+void revelar(int x , int y){
+  if(coordValid(x,y) == true && campoMinado[x][y].estaAberta == false){
+    campoMinado[x][y].estaAberta = true;
+    if(campoMinado[x][y].vizinhos == 0){
+      revelar(x-1 ,y-1);
+      revelar(x-1 ,y);
+      revelar(x-1 ,y+1);
+      revelar(x ,y-1);
+      revelar(x ,y+1);
+      revelar(x+1 ,y-1);
+      revelar(x+1 ,y);
+      revelar(x+1 ,y+1);
+    }
+  }
+  
+  
+}
+    
+int resultado(){
+  int cont = 0;
+  for (l = 0; l < LINHAS; l++){
+        for (c = 0; c < COLUNAS; c++){
+            if(campoMinado[l][c].estaAberta == false && campoMinado[l][c].temBomba == false){
+              cont++;
+            }
+        }
+    }
+  return cont;
+}
+
+
+void interacao(int x , int y){
+  
+  do{
+      campoVisualPrint();
+      printf("\nDigite a coordenada da celula que deseja revelar: ");
+      scanf("%d %d" , &x , &y);
+    
+    
+  
+      revelar(x , y);
+  }while(resultado() !=0 && campoMinado[x][y].temBomba == false);
+  if(campoMinado[x][y].temBomba == true){
+    printf("VOCE PERDEU");
+    
+  }
+  else{
+    printf("VOCE GANHOU");
+  }
 }
 
 
@@ -132,22 +193,11 @@ int main(int argc, char const *argv[])
 
     inicioJogo();
     addBombas(QTD_BOMBAS, campoMinado);
-    campoVisualPrint(campoMinado);
+    contarbombas();
+    printf("\n\n\t\t\tCampo Minado");
+    interacao(x,y);
 
-    printf("Digite a coordenada da celula que deseja revelar: ");
-    scanf("%d %d", &x, &y);
 
-    while (campoMinado[x][y].temBomba != true)
-    {
-        campoVisualPrint(campoMinado);
-        
-
-        printf("Digite a coordenada da celula que deseja revelar: ");
-        
-        scanf("%d %d", &x, &y);
-    }
-
-    printf("PERDEU! Voce encontrou uma bomba :( !");
-
+    
     return 0;
 }
