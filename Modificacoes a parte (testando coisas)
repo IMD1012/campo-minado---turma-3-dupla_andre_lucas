@@ -118,13 +118,13 @@ void contarbombas()
 void campoVisualPrint()
 {
 
-    printf("\n\n\t ");
+    printf("\n\n ");
     for (l = 0; l < COLUNAS; l++)
         printf("%4d", l); // índices das colunas
-    printf("\n\t ---------------------------------------------------------------------------------\n");
+    printf("\n  ---------------------------------------------------------------------------------\n");
     for (l = 0; l < LINHAS; l++)
     {
-        printf("%4d |", l); // índices das linhas
+        printf("%d |", l); // índices das linhas
         for (c = 0; c < COLUNAS; c++)
         {
             if (campoMinado[l][c].estaAberta)
@@ -146,7 +146,7 @@ void campoVisualPrint()
             printf("|");
         }
 
-        printf("\n\t ---------------------------------------------------------------------------------\n");
+        printf("\n  ---------------------------------------------------------------------------------\n");
     }
 }
 void revelar(int x, int y)
