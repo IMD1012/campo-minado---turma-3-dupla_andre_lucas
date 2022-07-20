@@ -118,13 +118,13 @@ void contarbombas()
 void campoVisualPrint()
 {
 
-    printf("\n\n\t ");
+    printf("\n\n ");
     for (l = 0; l < COLUNAS; l++)
-        printf("\t%d ", l); // índices das colunas
-    printf("\n\t  ---------------------------------------------------------------------------------\n");
+        printf("%4d", l); // índices das colunas
+    printf("\n  ---------------------------------------------------------------------------------\n");
     for (l = 0; l < LINHAS; l++)
     {
-        printf("\t%d |", l); // índices das linhas
+        printf("%d |", l); // índices das linhas
         for (c = 0; c < COLUNAS; c++)
         {
             if (campoMinado[l][c].estaAberta)
@@ -135,7 +135,13 @@ void campoVisualPrint()
                 }
                 else
                 {
+                  if(campoMinado[l][c].vizinhos == 0){
+                    printf(" : ");
+                  }
+                  else{
                     printf(" %d ", campoMinado[l][c].vizinhos);
+                  }
+                    
                 }
             }
             else
@@ -146,7 +152,7 @@ void campoVisualPrint()
             printf("|");
         }
 
-        printf("\n\t  ---------------------------------------------------------------------------------\n");
+        printf("\n  ---------------------------------------------------------------------------------\n");
     }
 }
 void revelar(int x, int y)
@@ -187,7 +193,7 @@ int resultado()
 void interacao(int x, int y)
 {
     time_t begin = time(NULL);
-    int decisao;
+    int decisao, cont =0;
     do
     {
         campoVisualPrint();
@@ -197,6 +203,44 @@ void interacao(int x, int y)
         printf("Digite o numero desejado: ");
         scanf("%d", &decisao);
 
+        if(cont == 0){
+          if (decisao == 1)
+        {
+            printf("\nDigite a coordenada da celula que deseja revelar: ");
+            scanf("%d %d", &x, &y);
+
+            revelar(x, y);
+        }
+          else if (decisao == 2)
+        {
+            
+              x = rand()%LINHAS;
+              y = rand()%COLUNAS;
+              if(quantBombasVizinhas(x,y) != 0 && campoMinado[x][y].temBomba == true){
+                while(quantBombasVizinhas(x,y) != 0){
+                  x = rand()%LINHAS;
+                  y = rand()%COLUNAS;
+                }
+                revelar(x, y);
+                cont++;
+              }
+              else{
+                revelar(x, y);
+                cont++;
+              }
+                
+                
+            
+            
+            
+        }
+          else if (decisao == 3)
+        {
+            time_t endParcial = time(NULL);
+            printf("O tempo gasto ate agora foi %ld segundos", (endParcial - begin));
+        }
+      }
+      else{
         if (decisao == 1)
         {
             printf("\nDigite a coordenada da celula que deseja revelar: ");
@@ -206,24 +250,29 @@ void interacao(int x, int y)
         }
         else if (decisao == 2)
         {
-            printf("Ainda nao existe essa função...");
+            
+          printf("\nEssa função ja foi usada");   
+               
         }
         else if (decisao == 3)
         {
             time_t endParcial = time(NULL);
             printf("O tempo gasto ate agora foi %ld segundos", (endParcial - begin));
         }
+      }
 
     } while (resultado() != 0 && campoMinado[x][y].temBomba == false);
     if (campoMinado[x][y].temBomba == true)
     {
         time_t end = time(NULL);
-        printf("VOCE PERDEU! \n");
+        campoVisualPrint();
+        printf("\nVOCE PERDEU! \n");
         printf("Voce gastou %ld segundos no campo minado \n", (end - begin));
     }
     else
     {
         time_t end = time(NULL);
+        campoVisualPrint();
         printf("VOCE GANHOU! \n");
         printf("Voce gastou %ld segundos no campo minado \n", (end - begin));
     }
