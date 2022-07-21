@@ -18,7 +18,7 @@ typedef struct Celulas_t
 
 // Variavel Global da Matriz referente ao campo
 int l, c; // l->linhas e c->colunas
-const int QTD_BOMBAS = 30;
+const int QTD_BOMBAS = 40;
 Celulas campoMinado[LINHAS][COLUNAS];
 
 // função para iniciarcampo
@@ -213,27 +213,14 @@ void interacao(int x, int y)
         }
           else if (decisao == 2)
         {
-            //regra das quina, 3 casas seguidas  
+            //regra das quina, 3 casas seguidas 
+            do{
               x = rand()%LINHAS;
               y = rand()%COLUNAS;
-              if(quantBombasVizinhas(x,y) != 0 && campoMinado[x][y].temBomba == true && campoMinado[x][y].estaAberta == false && campoMinado[x-1][y-1].estaAberta == false && campoMinado[x-1][y].estaAberta == false && campoMinado[x-1][y+1].estaAberta == false && campoMinado[x+1][y-1].estaAberta == false && campoMinado[x+1][y].estaAberta == false && campoMinado[x+1][y+1].estaAberta == false){
-                while(quantBombasVizinhas(x,y) != 0 && campoMinado[x][y].temBomba == true && campoMinado[x][y].estaAberta == false && campoMinado[x-1][y-1].estaAberta == false && campoMinado[x-1][y].estaAberta == false && campoMinado[x-1][y+1].estaAberta == false && campoMinado[x+1][y-1].estaAberta == false && campoMinado[x+1][y].estaAberta == false && campoMinado[x+1][y+1].estaAberta == false){
-                  x = rand()%LINHAS;
-                  y = rand()%COLUNAS;
-                }
-                revelar(x, y);
-                limite++;
-              }
-              else{
-                revelar(x, y);
-                limite++;
-              }
-                
-                
-            
-            
-            
-        }
+            }while(campoMinado[x][y].estaAberta == true || campoMinado[x-1][y-1].estaAberta == true && campoMinado[x-1][y].estaAberta == true && campoMinado[x-1][y+1].estaAberta == true && campoMinado[x][y-1].estaAberta == true && campoMinado[x][y+1].estaAberta == true && campoMinado[x+1][y-1].estaAberta == true && campoMinado[x+1][y].estaAberta == true && campoMinado[x+1][y+1].estaAberta == true || campoMinado[x][y].temBomba == true || campoMinado[x][y].vizinhos > 0);
+            revelar(x, y);
+            limite++;
+        }    
           else if (decisao == 3)
         {
             time_t endParcial = time(NULL);
