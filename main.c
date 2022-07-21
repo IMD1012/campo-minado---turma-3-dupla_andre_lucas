@@ -18,7 +18,7 @@ typedef struct Celulas_t
 
 // Variavel Global da Matriz referente ao campo
 int l, c; // l->linhas e c->colunas
-const int QTD_BOMBAS = 40;
+const int QTD_BOMBAS = 30;
 Celulas campoMinado[LINHAS][COLUNAS];
 
 // função para iniciarcampo
@@ -193,7 +193,7 @@ int resultado()
 void interacao(int x, int y)
 {
     time_t begin = time(NULL);
-    int decisao, cont =0;
+    int decisao, limite =0, libera = 0;
     do
     {
         campoVisualPrint();
@@ -203,7 +203,7 @@ void interacao(int x, int y)
         printf("Digite o numero desejado: ");
         scanf("%d", &decisao);
 
-        if(cont == 0){
+        if(limite == 0){
           if (decisao == 1)
         {
             printf("\nDigite a coordenada da celula que deseja revelar: ");
@@ -213,20 +213,20 @@ void interacao(int x, int y)
         }
           else if (decisao == 2)
         {
-            
+            //regra das quina, 3 casas seguidas  
               x = rand()%LINHAS;
               y = rand()%COLUNAS;
-              if(quantBombasVizinhas(x,y) != 0 && campoMinado[x][y].temBomba == true){
-                while(quantBombasVizinhas(x,y) != 0){
+              if(quantBombasVizinhas(x,y) != 0 && campoMinado[x][y].temBomba == true && campoMinado[x][y].estaAberta == false && campoMinado[x-1][y-1].estaAberta == false && campoMinado[x-1][y].estaAberta == false && campoMinado[x-1][y+1].estaAberta == false && campoMinado[x+1][y-1].estaAberta == false && campoMinado[x+1][y].estaAberta == false && campoMinado[x+1][y+1].estaAberta == false){
+                while(quantBombasVizinhas(x,y) != 0 && campoMinado[x][y].temBomba == true && campoMinado[x][y].estaAberta == false && campoMinado[x-1][y-1].estaAberta == false && campoMinado[x-1][y].estaAberta == false && campoMinado[x-1][y+1].estaAberta == false && campoMinado[x+1][y-1].estaAberta == false && campoMinado[x+1][y].estaAberta == false && campoMinado[x+1][y+1].estaAberta == false){
                   x = rand()%LINHAS;
                   y = rand()%COLUNAS;
                 }
                 revelar(x, y);
-                cont++;
+                limite++;
               }
               else{
                 revelar(x, y);
-                cont++;
+                limite++;
               }
                 
                 
