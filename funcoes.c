@@ -22,10 +22,14 @@ void inicioJogo()
         }
     }
 }
-
+void troca(int *x , int a){
+  a = *x;
+}
 // sortear bombas no campo
 void addBombas(int QTD_BOMBAS, Celulas campoMinado[LINHAS][COLUNAS])
 {
+    //campoMinado = malloc(sizeof(Celulas));
+  
     srand(time(NULL));
     for (int i = 1; i <= QTD_BOMBAS; i++)
     {
@@ -146,6 +150,8 @@ void campoVisualPrint()
 
 void revelar(int x, int y)
 {
+  
+    
     if (coordValid(x, y) == true && campoMinado[x][y].estaAberta == false)
     {
         campoMinado[x][y].estaAberta = true;
@@ -179,10 +185,11 @@ int resultado()
     return cont;
 }
 
-void interacao(int x, int y)
+void interacao(int *x, int *y)
 {
     time_t begin = time(NULL);
     int decisao, limite = 0, libera = 0;
+    
     do
     {
         campoVisualPrint();
@@ -197,25 +204,25 @@ void interacao(int x, int y)
             if (decisao == 1)
             {
                 printf("\nDigite a coordenada da celula que deseja revelar: ");
-                scanf("%d %d", &x, &y);
+                scanf("%d %d", *&x, *&y);
 
-                revelar(x, y);
+                revelar(*x, *y);
             }
             else if (decisao == 2)
             {
                 // regra das quina, 3 casas seguidas
                 do
                 {
-                    x = rand() % LINHAS;
-                    y = rand() % COLUNAS;
-                } while (campoMinado[x][y].estaAberta == true || campoMinado[x - 1][y - 1].estaAberta == true && campoMinado[x - 1][y].estaAberta == true && campoMinado[x - 1][y + 1].estaAberta == true && campoMinado[x][y - 1].estaAberta == true && campoMinado[x][y + 1].estaAberta == true && campoMinado[x + 1][y - 1].estaAberta == true && campoMinado[x + 1][y].estaAberta == true && campoMinado[x + 1][y + 1].estaAberta == true || campoMinado[x][y].temBomba == true || campoMinado[x][y].vizinhos > 0);
-                revelar(x, y);
+                    *x = rand() % LINHAS;
+                    *y = rand() % COLUNAS;
+                } while (campoMinado[*x][*y].estaAberta == true || campoMinado[*x - 1][*y - 1].estaAberta == true && campoMinado[*x - 1][*y].estaAberta == true && campoMinado[*x - 1][*y + 1].estaAberta == true && campoMinado[*x][*y - 1].estaAberta == true && campoMinado[*x][*y + 1].estaAberta == true && campoMinado[*x + 1][*y - 1].estaAberta == true && campoMinado[*x + 1][*y].estaAberta == true && campoMinado[*x + 1][*y + 1].estaAberta == true || campoMinado[*x][*y].temBomba == true || campoMinado[*x][*y].vizinhos > 0);
+                revelar(*x,*y);
                 limite++;
             }
             else if (decisao == 3)
             {
                 time_t endParcial = time(NULL);
-                printf("O tempo gasto ate agora foi %ld segundos", (endParcial - begin));
+                printf("\n\nO tempo gasto ate agora foi %ld segundos", (endParcial - begin));
             }
         }
         else
@@ -223,9 +230,9 @@ void interacao(int x, int y)
             if (decisao == 1)
             {
                 printf("\nDigite a coordenada da celula que deseja revelar: ");
-                scanf("%d %d", &x, &y);
+                scanf("%d %d", x, y);
 
-                revelar(x, y);
+                revelar(*x, *y);
             }
             else if (decisao == 2)
             {
@@ -235,17 +242,18 @@ void interacao(int x, int y)
             else if (decisao == 3)
             {
                 time_t endParcial = time(NULL);
-                printf("O tempo gasto ate agora foi %ld segundos", (endParcial - begin));
+                printf("\n\nO tempo gasto ate agora foi %ld segundos", (endParcial - begin));
             }
         }
 
-    } while (resultado() != 0 && campoMinado[x][y].temBomba == false);
-    if (campoMinado[x][y].temBomba == true)
+    } while (resultado() != 0 && campoMinado[*x][*y].temBomba == false);
+    if (campoMinado[*x][*y].temBomba == true)
     {
         time_t end = time(NULL);
         campoVisualPrint();
         printf("\nVOCE PERDEU! \n");
         printf("Voce gastou %ld segundos no campo minado \n", (end - begin));
+        
     }
     else
     {

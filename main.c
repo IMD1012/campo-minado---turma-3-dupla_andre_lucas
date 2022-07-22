@@ -14,7 +14,8 @@ int main()
     addBombas(QTD_BOMBAS, campoMinado);
     contarBombas();
     printf("\n\n\t\t\tCampo Minado");
-    interacao(x, y);
+    interacao(&x, &y);
+    
 
     return 0;
 }
